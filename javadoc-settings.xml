@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Файл настроек для генерации Javadoc (для IDEA/Eclipse не требуется —
+  весь Javadoc написан непосредственно в исходниках).
+
+  Как сгенерировать HTML-документацию из командной строки:
+
+    javadoc -encoding UTF-8 -d docs/javadoc \
+        -sourcepath src/main/java \
+        -subpackages gallery
+
+  Примечание: проект использует Java 17; все сложные функции
+  (распознавание формата по магическим байтам, вычисление похожести,
+  извлечение даты съёмки, формирование отчёта) покрыты тегами
+  @param / @return / @throws.
+-->
+<javadoc>
+    <doctitle>Оптимизатор галереи фотографий — OOP курсовой проект</doctitle>
+    <windowtitle>Gallery Optimizer API</windowtitle>
+    <charset>UTF-8</charset>
+    <docencoding>UTF-8</docencoding>
+</javadoc>

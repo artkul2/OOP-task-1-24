@@ -5,9 +5,8 @@ import gallery.model.Season;
 
 import java.time.LocalDate;
 
-/**
- * Каталог вида "год/сезон", например "2023/Лето".
- * Наследник {@link YearBasedCatalogStrategy}.
+/*
+ Каталог вида "год/сезон", например "2023/Лето"
  */
 public class SeasonCatalogStrategy extends YearBasedCatalogStrategy {
 

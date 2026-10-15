@@ -2,15 +2,9 @@ package gallery.model;
 
 import java.util.Objects;
 
-/**
- * Метаданные фотографии (EXIF-подобные).
- * Неизменяемый record.
- *
- * @param cameraModel    модель камеры (может быть {@code null}, если не задана)
- * @param photographer   автор снимка (может быть {@code null})
- * @param widthPx        ширина в пикселях, >= 0
- * @param heightPx       высота в пикселях, >= 0
- * @param takenAtEpochSec unix-время съёмки в секундах; 0 означает «дата неизвестна»
+/*
+ Метаданные фотографии (EXIF-подобные)
+ Неизменяемый record
  */
 public record PhotoMetadata(String cameraModel,
                             String photographer,
@@ -18,10 +12,8 @@ public record PhotoMetadata(String cameraModel,
                             int heightPx,
                             long takenAtEpochSec) {
 
-    /**
-     * Компактный конструктор проверяет инварианты записи.
-     *
-     * @throws IllegalArgumentException если размеры отрицательные или время съёмки отрицательное
+    /*
+     Компактный конструктор проверяет инварианты записи
      */
     public PhotoMetadata {
         if (widthPx < 0 || heightPx < 0) {
@@ -31,21 +23,21 @@ public record PhotoMetadata(String cameraModel,
         if (takenAtEpochSec < 0) {
             throw new IllegalArgumentException("Время съёмки не может быть отрицательным: " + takenAtEpochSec);
         }
-        cameraModel = cameraModel == null ? "" : cameraModel.trim();
-        photographer = photographer == null ? "" : photographer.trim();
+        cameraModel = cameraModel == null ? "" : cameraModel;
+        photographer = photographer == null ? "" : photographer;
     }
 
-    /** Метод-фабрика для метаданных без даты съёмки. */
+    /*
+    Метод-фабрика для метаданных без даты съёмки
+    */
     public static PhotoMetadata unknownDate(String cameraModel, String photographer, int w, int h) {
         return new PhotoMetadata(cameraModel, photographer, w, h, 0L);
     }
 
-    /** Есть ли известная дата съёмки. */
     public boolean hasDate() {
         return takenAtEpochSec > 0;
     }
 
-    /** Количество мегапикселей. */
     public double megaPixels() {
         return (widthPx * (double) heightPx) / 1_000_000.0;
     }

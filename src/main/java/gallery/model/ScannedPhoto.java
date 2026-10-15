@@ -1,9 +1,8 @@
 package gallery.model;
 
-/**
- * Отсканированная плёночная фотография. Не имеет EXIF-камеры,
- * но имеет разрешение сканера (DPI) и глубину цвета.
- * Демонстрирует наследование: переопределяет {@code describe()} и {@code similarityTo()}.
+
+/*
+ Не цифровая фотография (отсканированная). Имеет разрешение сканера и глубину цвета
  */
 public class ScannedPhoto extends Photo {
 
@@ -30,13 +29,13 @@ public class ScannedPhoto extends Photo {
         return colorDepthBits;
     }
 
-    /** Физический размер отпечатка в сантиметрах (ширина), исходя из пикселей и DPI. */
+    /* Физический размер отпечатка в сантиметрах (ширина), исходя из пикселей и DPI. */
     public double printWidthCm() {
         return metadata.widthPx() / (double) dpi * 2.54;
     }
 
-    /**
-     * Похожесть сканов: побайтовое совпадение даёт 1.0; иначе совпадение разрешения и глубины цвета.
+    /*
+     Похожесть сканов: побайтовое совпадение даёт 1.0; иначе совпадение разрешения и глубины цвета.
      */
     @Override
     public double similarityTo(Similarity other) {
@@ -48,10 +47,10 @@ public class ScannedPhoto extends Photo {
         }
         double score = 0.0;
         if (metadata.widthPx() == p.metadata.widthPx() && metadata.heightPx() == p.metadata.heightPx()) {
-            score += 0.5;
+            score += 0.2;
         }
         if (dpi == p.dpi && colorDepthBits == p.colorDepthBits) {
-            score += 0.5;
+            score += 0.3;
         }
         return score;
     }

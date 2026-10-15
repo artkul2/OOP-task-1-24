@@ -2,9 +2,8 @@ package gallery.service;
 
 import gallery.model.Photo;
 
-/**
- * Раскладка по форматам: "jpeg", "png" и т.д.
- * Дата съёмки не требуется — исключений не бросает.
+/*
+ Раскладка по форматам: "jpeg", "png" и т.д.
  */
 public class FormatCatalogStrategy implements CatalogStrategy {
 

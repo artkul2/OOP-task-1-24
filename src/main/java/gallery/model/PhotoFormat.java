@@ -1,7 +1,7 @@
 package gallery.model;
 
-/**
- * Форматы файлов, которые умеет распознавать оптимизатор галереи.
+/*
+ Форматы файлов, которые умеет распознавать оптимизатор галереи.
  */
 public enum PhotoFormat {
     JPEG("jpg", "image/jpeg"),
@@ -28,11 +28,11 @@ public enum PhotoFormat {
         return mimeType;
     }
 
-    /**
-     * Определяет формат по магическим байтам заголовка файла.
-     *
-     * @param header первые байты файла (можно передать меньше — метод устойчив к короткому массиву)
-     * @return найденный формат или {@link #UNKNOWN}
+    /*
+     Определяет формат по магическим байтам заголовка файла.
+
+     На вход получает первые байты файла (можно передать меньше — метод устойчив к короткому массиву)
+     Выводит найденный формат или UNKNOWN
      */
     public static PhotoFormat fromMagicBytes(byte[] header) {
         if (header == null || header.length < 2) {
@@ -68,11 +68,8 @@ public enum PhotoFormat {
         return UNKNOWN;
     }
 
-    /**
-     * Определяет формат по расширению имени файла (без учёта регистра).
-     *
-     * @param fileName имя файла
-     * @return найденный формат или {@link #UNKNOWN}
+    /*
+     Определяет формат по расширению имени файла (без учёта регистра).
      */
     public static PhotoFormat fromFileName(String fileName) {
         if (fileName == null) {

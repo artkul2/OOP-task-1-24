@@ -1,7 +1,7 @@
 package gallery.model;
 
-/**
- * Времена года — используются для распределения фотографий по каталогам.
+/*
+ Времена года - используются для распределения фотографий по каталогам.
  */
 public enum Season {
     WINTER("Зима", new int[]{12, 1, 2}),
@@ -25,12 +25,8 @@ public enum Season {
         return months.clone();
     }
 
-    /**
-     * Возвращает время года по номеру месяца (1-12).
-     *
-     * @param month номер месяца, от 1 до 12
-     * @return соответствующая сезон
-     * @throws IllegalArgumentException если месяц вне диапазона 1..12
+    /*
+     Возвращает время года по номеру месяца (1-12).
      */
     public static Season ofMonth(int month) {
         if (month < 1 || month > 12) {
@@ -43,7 +39,6 @@ public enum Season {
                 }
             }
         }
-        // недостижимо при корректном диапазоне
         throw new IllegalStateException("Сезон не найден для месяца " + month);
     }
 }

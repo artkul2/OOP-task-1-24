@@ -7,7 +7,6 @@ import gallery.model.Photo;
 import gallery.model.PhotoFormat;
 import gallery.model.PhotoMetadata;
 import gallery.model.ScannedPhoto;
-import gallery.service.CatalogStrategy;
 import gallery.service.FormatCatalogStrategy;
 import gallery.service.MonthCatalogStrategy;
 import gallery.service.PhotoGalleryOptimizer;
@@ -19,15 +18,15 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Точка входа консольного приложения.
- * Демонстрирует ВСЕ методы проекта: модели, сервисов, стратегий и исключений.
- */
+
 public final class GalleryApp {
 
     private GalleryApp() {
     }
 
+    /*
+     Метод генерации файлов jpeg из текста
+     */
     private static byte[] jpeg(String payload) {
         // заголовок JPEG + полезная нагрузка — чтобы формат определялся по магическим байтам
         byte[] head = new byte[]{(byte) 0xFF, (byte) 0xD8, (byte) 0xFF, (byte) 0xE0};
@@ -47,7 +46,7 @@ public final class GalleryApp {
         System.out.println("#        ОПТИМИЗАТОР ГАЛЕРЕИ ФОТОГРАФИЙ — ДЕМО             #");
         System.out.println("############################################################\n");
 
-        // --- 1. Перечисления модели ---
+        // --- 1/2. Перечисления модели ---
         System.out.println("[1] Перечисление PhotoFormat:");
         for (PhotoFormat f : PhotoFormat.values()) {
             System.out.printf("    %-7s ext=%-5s mime=%s%n", f, f.getExtension(), f.getMimeType());
@@ -61,7 +60,7 @@ public final class GalleryApp {
             System.out.printf("    месяц %2d -> %s (%s)%n", m, SeasonHelper.name(m), SeasonHelper.months(m));
         }
 
-        // --- 2. Record метаданных ---
+        // --- 3. Record метаданных ---
         System.out.println("\n[3] Record PhotoMetadata:");
         PhotoMetadata md1 = new PhotoMetadata("Canon EOS R", "Анна", 4000, 3000, epoch(2023, 7, 15));
         PhotoMetadata md2 = PhotoMetadata.unknownDate("Nikon Z6", "Борис", 1000, 800);
@@ -70,29 +69,28 @@ public final class GalleryApp {
         System.out.println("    md1.hasDate()=" + md1.hasDate() + ", md2.hasDate()=" + md2.hasDate());
         System.out.printf("    md1.megaPixels()=%.1f%n", md1.megaPixels());
 
-        // --- 3. Классы модели (наследование) ---
-        System.out.println("\n[4] DigitalPhoto и ScannedPhoto (наследники абстрактного Photo):");
+        // --- 4. Классы DigitalPhoto и ScannedPhoto модели ---
+        System.out.println("\n[4] DigitalPhoto и ScannedPhoto:");
         DigitalPhoto d1 = new DigitalPhoto("IMG_0001.JPG", jpeg("sunset"), md1);
         DigitalPhoto d2 = new DigitalPhoto("IMG_0002.JPG", jpeg("beach"),
                 new PhotoMetadata("Canon EOS R", "Анна", 4000, 3000, epoch(2023, 7, 15)));
         DigitalPhoto d1copy = new DigitalPhoto("IMG_0001_copy.JPG", jpeg("sunset"), md1);
-        ScannedPhoto s1 = new ScannedPhoto("scan_1995.png",
-                new byte[]{(byte) 0x89, 0x50, 0x4E, 0x47, 1, 2, 3},
+        ScannedPhoto s1 = new ScannedPhoto("scan_1995.png", jpeg("axe"),
                 new PhotoMetadata("", "неизвестен", 1200, 900, epoch(1995, 12, 20)), 600, 24);
-        System.out.println("    " + d1.describe());
-        System.out.println("    " + d2.describe());
-        System.out.println("    " + s1.describe());
+        System.out.println("    d1 = " + d1.describe());
+        System.out.println("    d2 = " + d2.describe());
+        System.out.println("    s1 = " + s1.describe());
         System.out.println("    d1.sha256() = " + d1.sha256().substring(0, 16) + "...");
         System.out.println("    d1.getTakenDate() = " + d1.getTakenDate() + ", сезон = " + d1.getSeason());
 
-        // --- 4. Интерфейс Similarity ---
+        // --- 5. Интерфейс Similarity ---
         System.out.println("\n[5] Интерфейс Similarity:");
         System.out.println("    d1.isDuplicateOf(d1copy) = " + d1.isDuplicateOf(d1copy));
         System.out.println("    d1.isDuplicateOf(d2)     = " + d1.isDuplicateOf(d2));
         System.out.printf("    d1.similarityTo(d2)      = %.2f (одинаковая камера/автор/время)%n", d1.similarityTo(d2));
         System.out.printf("    d1.similarityTo(s1)      = %.2f (разные подтипы)%n", d1.similarityTo(s1));
 
-        // --- 5. Галерея ---
+        // --- 6. Галерея ---
         Gallery gallery = new Gallery("Отпуск");
         gallery.addPhoto(d1);
         gallery.addPhoto(d1copy);
@@ -103,7 +101,7 @@ public final class GalleryApp {
         System.out.println("    findByFileName(\"IMG_0001.JPG\") присутствует: "
                 + gallery.findByFileName("IMG_0001.JPG").isPresent());
 
-        // --- 6. Сервис-оптимизатор ---
+        // --- 7/8. Сервис-оптимизатор ---
         PhotoGalleryOptimizer optimizer = new PhotoGalleryOptimizer();
         List<Photo> all = gallery.getPhotos();
 
@@ -121,7 +119,7 @@ public final class GalleryApp {
             System.out.println("    сохранилось: " + p.getFileName());
         }
 
-        // --- 7. Стратегии распределения по каталогам ---
+        // --- 9. Стратегии распределения по каталогам ---
         System.out.println("\n[9] Стратегии CatalogStrategy:");
         try {
             Map<String, List<String>> bySeason = optimizer.buildCatalogMap(cleaned, new SeasonCatalogStrategy());
@@ -134,7 +132,7 @@ public final class GalleryApp {
             System.err.println("    Неожиданно: " + e.getMessage());
         }
 
-        // --- 8. Собственное исключение ---
+        // --- 10. Собственное исключение ---
         System.out.println("\n[10] Собственное исключение InvalidPhotoMetadataException:");
         Gallery noDate = new Gallery("Без даты");
         noDate.addPhoto(new DigitalPhoto("no_exif.jpg", jpeg("??"),
@@ -147,7 +145,7 @@ public final class GalleryApp {
             System.out.println("    getPhotoFileName() = " + e.getPhotoFileName());
         }
 
-        // --- 9. Отчёт ---
+        // --- 11. Отчёт ---
         System.out.println("\n[11] generateReport:");
         System.out.println(optimizer.generateReport(gallery));
 
@@ -166,7 +164,7 @@ public final class GalleryApp {
         return new FormatCatalogStrategy().getName();
     }
 
-    /** Вспомогательный класс для красивого вывода перечисления Season. */
+    /* Вспомогательный класс для красивого вывода перечисления Season. */
     static final class SeasonHelper {
         static String name(int month) {
             return gallery.model.Season.ofMonth(month).getDisplayName();

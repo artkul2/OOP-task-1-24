@@ -2,4 +2,3 @@ build/
 *.class
 .idea/
 out/
-doc/

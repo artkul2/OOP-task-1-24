@@ -4,9 +4,8 @@ import gallery.model.Photo;
 
 import java.time.LocalDate;
 
-/**
- * Каталог вида "год/месяц", например "2023/07".
- * Наследник {@link YearBasedCatalogStrategy}.
+/*
+ Каталог вида "год/месяц", например "2023/07"
  */
 public class MonthCatalogStrategy extends YearBasedCatalogStrategy {
 

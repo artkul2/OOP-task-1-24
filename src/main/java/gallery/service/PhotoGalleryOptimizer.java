@@ -9,19 +9,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Основной сервис «Оптимизатор галереи».
- * Имплементирует интерфейс {@link GalleryOptimizer} и использует
- * стратегии распределения по каталогам ({@link CatalogStrategy}).
+/*
+ Оптимизирует галерею, удаляя совпавшие фотографии
  */
 public class PhotoGalleryOptimizer implements GalleryOptimizer {
 
-    /**
-     * Группирует индексы фото с одинаковым SHA-256.
-     * Возвращает только группы размера >= 2 (т.е. реальные дубликаты).
-     *
-     * @param photos список фотографий (пустой список допустим)
-     * @return список групп — каждая группа это список индексов дубликатов
+    /*
+     Группирует индексы фото с одинаковым SHA-256
+     Возвращает только группы размера >= 2 (только дублирующиеся фотографии)
      */
     @Override
     public List<List<Integer>> findDuplicateGroups(List<Photo> photos) {
@@ -41,13 +36,9 @@ public class PhotoGalleryOptimizer implements GalleryOptimizer {
         return groups;
     }
 
-    /**
-     * Удаляет из галереи все полностью одинаковые фото, оставляя первое вхожддение.
-     *
-     * @param gallery исходная галерея (не изменяется)
-     * @return новая галерея с именем "&lt;имя&gt; (очищенная)" без дубликатов
+    /*
+     Удаляет из галереи полностью одинаковые фото, оставляя первое из них
      */
-    @Override
     public Gallery removeDuplicates(Gallery gallery) {
         if (gallery == null) {
             throw new IllegalArgumentException("Галерея не может быть null");
@@ -57,8 +48,7 @@ public class PhotoGalleryOptimizer implements GalleryOptimizer {
         List<List<Integer>> dupGroups = findDuplicateGroups(photos);
         List<Integer> toRemove = new ArrayList<>();
         for (List<Integer> group : dupGroups) {
-            // первое оставляем, остальные — на удаление
-            for (int idx = 1; idx < group.size(); idx++) {
+            for (int idx = 1; idx < group.size(); idx++) { // первое оставляем, остальные удаляются
                 toRemove.add(group.get(idx));
             }
         }
@@ -70,10 +60,8 @@ public class PhotoGalleryOptimizer implements GalleryOptimizer {
         return cleaned;
     }
 
-    /**
-     * Распределяет фото по каталогам согласно выбранной стратегии.
-     *
-     * @throws InvalidPhotoMetadataException если стратегии нужны метаданные, которых нет у фото
+    /*
+     Распределяет фото по каталогам согласно выбранной стратегии
      */
     @Override
     public Map<String, List<String>> buildCatalogMap(Gallery gallery, CatalogStrategy strategy)
@@ -83,13 +71,15 @@ public class PhotoGalleryOptimizer implements GalleryOptimizer {
         }
         Map<String, List<String>> catalog = new LinkedHashMap<>();
         for (Photo photo : gallery.getPhotos()) {
-            String dir = strategy.resolveCatalog(photo); // бросает наше исключение при отсутствии даты
+            String dir = strategy.resolveCatalog(photo); // позволяет делить по форматам, годам, месяцам и сезонам в зависимости от стратегии
             catalog.computeIfAbsent(dir, k -> new ArrayList<>()).add(photo.getFileName());
         }
         return catalog;
     }
 
-    /** Формирует многострочный текстовый отчёт о галерее. */
+    /*
+     Не краткое описание галереи, для вывода в консоль
+     */
     @Override
     public String generateReport(Gallery gallery) {
         if (gallery == null) {

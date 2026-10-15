@@ -51,31 +51,15 @@ src/test/java/gallery/service/
 | Имплементация интерфейса | `Photo implements Similarity`, `PhotoGalleryOptimizer implements GalleryOptimizer`, стратегии `implements CatalogStrategy` |
 | Классы, enum, record модели | классы `Photo/Gallery/...`, enum `PhotoFormat/Season`, record `PhotoMetadata` |
 | Собственное исключение | `InvalidPhotoMetadataException` (проверяемое, бросается при отсутствии даты съёмки) |
-| Вывод всех методов в консоль | `bash scripts/run-demo.sh` |
+| Вывод всех методов в консоль | `scripts/run-demo.bat` (Windows) / `run-demo.sh` (Linux/macOS) |
 | Юнит-тесты (≥15) | 26 тестов JUnit 5, включая исключения и особые случаи |
 | Javadoc | документированы все классы и сложные методы |
 
 ## Сборка и запуск
 
-```bash
-# компиляция
-bash scripts/build.sh
+### Windows — самый простой способ
 
-# консольное демо (показывает работу всех методов)
-bash scripts/run-demo.sh
-
-# юнит-тесты (нужен junit-platform-console-standalone.jar)
-mkdir -p lib && curl -sSL -o lib/junit-platform-console-standalone.jar \
-  https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.10.2/junit-platform-console-standalone-1.10.2.jar
-bash scripts/run-tests.sh
-
-# генерация HTML-документации Javadoc (откроется в doc/javadoc/index.html)
-bash scripts/gen-javadoc.sh
-```
-
-### Windows (без bash)
-
-Используйте `.bat`-скрипты из папки `scripts` (двойной клик или запуск в `cmd`):
+Дважды щёлкните по `.bat`-скриптам из папки `scripts` (или запустите их в `cmd`):
 
 ```bat
 scripts\run-demo.bat    :: компиляция + консольное демо
@@ -83,7 +67,27 @@ scripts\run-tests.bat   :: компиляция + запуск 26 юнит-те�
 scripts\gen-javadoc.bat :: генерация HTML-документации (doc\javadoc\index.html)
 ```
 
-JUnit-jar (`lib/junit-platform-console-standalone.jar`) уже лежит в репозитории, скачивать его не нужно. Требуется только установленный JDK 17+ (проверка: `java -version`).
+### Linux / macOS
+
+```bash
+bash scripts/build.sh      # компиляция
+bash scripts/run-demo.sh   # консольное демо (показывает работу всех методов)
+bash scripts/run-tests.sh  # юнит-тесты
+bash scripts/gen-javadoc.sh # HTML-документация Javadoc (doc/javadoc/index.html)
+```
+
+### Без скриптов — одной командой напрямую (любая ОС)
+
+Скрипты — это лишь удобная обёртка; на самом деле они вызывают стандартные утилиты JDK. Можно обойтись без них вообще:
+
+```bash
+javac -d build $(find src/main/java -name "*.java")   # компиляция
+java -cp build gallery.console.GalleryApp             # запуск демо
+```
+
+(На Windows вместо `$(find ...)` перечислите файлы вручную или используйте `dir /s /b *.java`.)
+
+**Требования:** только установленный JDK 17+ (проверка: `java -version`). JUnit-jar (`lib/junit-platform-console-standalone.jar`) уже лежит в репозитории, скачивать его не нужно. Maven/Gradle не требуются.
 
 ## Пример вывода демо
 

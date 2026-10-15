@@ -45,7 +45,7 @@ public class PhotoGalleryOptimizer implements GalleryOptimizer {
      * Удаляет из галереи все полностью одинаковые фото, оставляя первое вхожддение.
      *
      * @param gallery исходная галерея (не изменяется)
-     * @return новая галерея "<имя> (очищенная)" без дубликатов
+     * @return новая галерея с именем "&lt;имя&gt; (очищенная)" без дубликатов
      */
     @Override
     public Gallery removeDuplicates(Gallery gallery) {

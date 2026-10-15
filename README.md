@@ -68,6 +68,9 @@ bash scripts/run-demo.sh
 mkdir -p lib && curl -sSL -o lib/junit-platform-console-standalone.jar \
   https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.10.2/junit-platform-console-standalone-1.10.2.jar
 bash scripts/run-tests.sh
+
+# генерация HTML-документации Javadoc (откроется в doc/javadoc/index.html)
+bash scripts/gen-javadoc.sh
 ```
 
 ### Windows (без bash)
@@ -77,6 +80,7 @@ bash scripts/run-tests.sh
 ```bat
 scripts\run-demo.bat    :: компиляция + консольное демо
 scripts\run-tests.bat   :: компиляция + запуск 26 юнит-тестов
+scripts\gen-javadoc.bat :: генерация HTML-документации (doc\javadoc\index.html)
 ```
 
 JUnit-jar (`lib/junit-platform-console-standalone.jar`) уже лежит в репозитории, скачивать его не нужно. Требуется только установленный JDK 17+ (проверка: `java -version`).
